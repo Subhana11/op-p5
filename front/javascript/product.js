@@ -40,4 +40,24 @@ function addOptionValue(data, index) {
   document.getElementById('colors').appendChild(optionValue);
   optionValue.textContent = data.colors[index];
 }
+// contact de l'API
+async function init() {
+    try {
+      let response = await fetch(`http://localhost:3000/api/products/${id}`);
+      let data = await response.json();
+      console.log(data);
+  
+      addProductImage(data);
+      addProductTitle(data);
+      addProductPrice(data);
+      addProductDescription(data);
+      for (let i = 0; i < data.colors.length; i++) {
+        addOptionValue(data, i);
+      }
+    } catch (error) {
+      alert(`Serveur indisponible : ${error}`);
+    }
+  }
+  
+  init();
 
