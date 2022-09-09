@@ -153,6 +153,18 @@ function addItemQuantity(index) {
       .getElementsByClassName('settings__delete-' + index)[0]
       .appendChild(deleteButton);
   }
-
+  /********************************************************   GESTION DU PANIER  *************************************************************/
+// initialisation panier
+function getBasket() {
+    let basket = localStorage.getItem('basket');
+  
+    if (basket !== null) {
+      return JSON.parse(basket);
+      
+    }
+  
+    return [];
+    
+  }
   
   
