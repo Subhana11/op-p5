@@ -260,4 +260,48 @@ function saveToBasket(basket) {
   }
   
   
+  /**************************************************   DEFINITION DES ARTICLES DU PANIER  *******************************************************/
+  
+  async function init() {
+    try {
+      let basket = getBasket();
+      for (let i = 0; i < basket.length; i++) {
+        // correspondance de l'url pour chaque produit du panier par rapport à son id
+        const response = await fetch(
+          `http://localhost:3000/api/products/${basket[i].id}`
+        );
+        const data = await response.json();
+  
+        // création d'un objet avec clé/value = id/prix (2/2)
+        productPriceMapping[data._id] = data.price;
+  
+        addArticle(basket, i);
+        addImgContent(i);
+        addImg(data, i);
+        addItemContent(i);
+        addItemDescription(i);
+        addItemTitle(data, i);
+        addItemColor(basket, i);
+        addProductPrice(data, i);
+        addItemSettings(i);
+        setItemQuantity(i);
+        addItemQuantity(i);
+        addInputQuantity(basket, i);
+        addContainerOfDelete(i);
+        addDeleteProductContent(i);
+      }
+  
+      deleteProduct();
+      modifyQuantity();
+      updateTextQuantity();
+      updateTotalPrice();
+  
+      getAllProductId();
+    } catch {
+      alert(`Serveur indisponible : ${error}`);
+    }
+  }
+  
+  init();
+   
   
