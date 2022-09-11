@@ -166,5 +166,98 @@ function getBasket() {
     return [];
     
   }
+  // Affichage quantité totale : filtrage avec map(), addition par paire de chaque quantité avec reduce()
+function updateTextQuantity() {
+    const totalQuantity = getBasket()
+      .map((p) => p.quantity)
+      .reduce((prevTotal, quantity) => prevTotal + quantity, 0);
+    const textQuantity = document.getElementById('totalQuantity');
+    textQuantity.textContent = totalQuantity;
+  }
+ // Affichage prix total :
+
+// création d'un objet avec clé/value = id/prix (1/2)
+let productPriceMapping = {};
+
+function updateTotalPrice() {
+  const totalPrice = getBasket()
+    .map((p) => ({
+      id: p.id,
+      quantity: p.quantity,
+    }))
+    .reduce(
+      (prevTotal, currentItem) =>
+        prevTotal + currentItem.quantity * productPriceMapping[currentItem.id],
+      0
+    );
+
+  const textTotalPrice = document.getElementById('totalPrice');
+  textTotalPrice.textContent = totalPrice;
+}
+// sauvegarder  le panier de l'API au format JSON
+function saveToBasket(basket) {
+    localStorage.setItem('basket', JSON.stringify(basket));
+  }
+  
+  // Supprimer le produit du panier et du DOM
+  function deleteProduct() {
+    let basket = getBasket();
+  
+    for (let j = 0; j < basket.length; j++) {
+      const clickToDelete = document.getElementsByClassName('deleteItem-' + j)[0];
+      const currentItem = basket[j];
+  
+      clickToDelete.addEventListener('click', () => {
+        let basket = getBasket();
+        const itemsToKeep = basket.filter(
+          (p) => p.id !== currentItem.id || p.color !== currentItem.color
+        );
+  
+        let section = document.getElementById('cart__items');
+        let article = document.getElementsByClassName('cart__item-' + j)[0];
+        section.removeChild(article);
+  
+        saveToBasket(itemsToKeep);
+        updateTextQuantity();
+        updateTotalPrice();
+      });
+    }
+  }
+  
+  // Modifier la quantité d'un produit
+  function modifyQuantity() {
+    let basket = getBasket();
+  
+    for (let k = 0; k < basket.length; k++) {
+      let input = document.getElementsByClassName('itemQuantity-' + k)[0];
+      let product = document.getElementsByClassName('cart__item-' + k)[0];
+  
+      input.addEventListener('change', (e) => {
+        // quantité modifiée
+        const updateQuantity = Number(e.target.value);
+        // détermination de l'index du produit selectionné
+        const addedProductIndex = basket.findIndex(
+          (p) => p.id === product.dataset.id && p.color === product.dataset.color
+        );
+        const addedProduct = basket[addedProductIndex];
+  
+        // Changement de la quantité du produit du panier
+        addedProduct.quantity = updateQuantity;
+  
+        // Plafonnement de la quantité à 100
+        if (addedProduct.quantity > 100) {
+          addedProduct.quantity = 100;
+          alert(
+            'Vous avez atteint la limite de quantité à 100 par commande pour ce produit'
+          );
+        }
+  
+        saveToBasket(basket);
+        updateTextQuantity();
+        updateTotalPrice();
+      });
+    }
+  }
+  
   
   
