@@ -278,7 +278,6 @@ function validateFirstName() {
     return true;
   } else {
     validationTxt.textContent = 'Prénom non valide';
-    inputFirstName.style.backgroundColor = '#fbbcbc';
 
     return false;
   }
@@ -295,10 +294,10 @@ function validateName() {
 
   if (inputName.value.match(RegExpName)) {
     return true;
+
   } else {
     validationTxt.textContent = 'Nom non valide';
    
-
     return false;
   }
 }
@@ -339,7 +338,6 @@ function validateAddress() {
     return true;
   } else {
     validationTxt.textContent = 'Adresse non valide';
-   
 
     return false;
   }
@@ -357,7 +355,7 @@ function validateeMail() {
     /^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$/,
     'g'
   );
-
+  
   if (inputEmail.value.match(regExpMail)) {
     
     return true;
