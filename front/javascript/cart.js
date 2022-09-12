@@ -260,6 +260,116 @@ function saveToBasket(basket) {
   }
   
   
+/**********************************************************  VALIDATION DU FORMULAIRE  ***************************************************************/
+
+const RegExpName = new RegExp(/^[A-Za-z\é\è\ê\ñ\ë\Ë\Ê\-]+$/);
+
+// Validation prénom
+const inputFirstName = document.getElementById('firstName');
+inputFirstName.addEventListener('input', () => {
+  validateFirstName(this);
+});
+
+function validateFirstName() {
+  let validationTxt = document.getElementById('firstNameErrorMsg');
+
+  if (inputFirstName.value.match(RegExpName)) {
+  
+    return true;
+  } else {
+    validationTxt.textContent = 'Prénom non valide';
+    inputFirstName.style.backgroundColor = '#fbbcbc';
+
+    return false;
+  }
+}
+
+// Validation nom
+const inputName = document.getElementById('lastName');
+inputName.addEventListener('input', () => {
+  validateName(this);
+});
+
+function validateName() {
+  let validationTxt = document.getElementById('lastNameErrorMsg');
+
+  if (inputName.value.match(RegExpName)) {
+    return true;
+  } else {
+    validationTxt.textContent = 'Nom non valide';
+   
+
+    return false;
+  }
+}
+
+// Validation ville
+const inputCity = document.getElementById('city');
+inputCity.addEventListener('input', () => {
+  validateCity(this);
+});
+
+function validateCity() {
+  let validationTxt = document.getElementById('cityErrorMsg');
+  const regExpCity = new RegExp(/^[A-Za-z\à\é\è\ê\ñ\ë\Ë\Ê\-]{1,45}$/);
+
+  if (inputCity.value.match(regExpCity)) {
+  
+    return true;
+  } else {
+    validationTxt.textContent = 'Ville non valide';
+    
+
+    return false;
+  }
+}
+
+// Validation de l'adresse
+const inputAddress = document.getElementById('address');
+inputAddress.addEventListener('input', () => {
+  validateAddress(this);
+});
+
+function validateAddress() {
+  let validationTxt = document.getElementById('addressErrorMsg');
+  const regExpAdress = new RegExp(/^[a-zA-Z0-9\à\é\è\ê\ñ\ë\Ë\Ê\s,'-]{5,}$/);
+
+  if (inputAddress.value.match(regExpAdress)) {
+   
+    return true;
+  } else {
+    validationTxt.textContent = 'Adresse non valide';
+   
+
+    return false;
+  }
+}
+
+// Validation du format de l'e-mail
+const inputEmail = document.getElementById('email');
+inputEmail.addEventListener('input', () => {
+  validateeMail(this);
+});
+
+function validateeMail() {
+  let validationTxt = document.getElementById('emailErrorMsg');
+  const regExpMail = new RegExp(
+    /^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$/,
+    'g'
+  );
+
+  if (inputEmail.value.match(regExpMail)) {
+    
+    return true;
+  } else {
+    validationTxt.textContent = 'E-mail non valide';
+   
+    return false;
+  }
+}
+
+
+
   /**************************************************   DEFINITION DES ARTICLES DU PANIER  *******************************************************/
   
   async function init() {
