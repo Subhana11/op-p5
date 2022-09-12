@@ -368,7 +368,69 @@ function validateeMail() {
   }
 }
 
+/**************************************************   ENVOI DU FORMULAIRE  *******************************************************/
 
+// Récupération des Ids des produits seulement si le panier est existant
+function getAllProductId() {
+  if (getBasket() != null) {
+    return getBasket().map((p) => p.id);
+  }
+  return [];
+}
+
+// Définition du tableau products contenant les Ids des produits
+const products = getAllProductId();
+
+// Envoi de la commande et récupération de l'orderId
+document
+  .getElementById('order')
+  .addEventListener('click', async function ordering(e) {
+    e.preventDefault();
+
+    // Empêcher l'envoi de la commande si le panier est vide ou inexistant (dans le localStorage)
+    if (getBasket() == false || getBasket() == null) {
+      alert(
+        `Vous devez constituer un panier d'achat avant d'envoyer votre commande`
+      );
+    } else {
+      // Construction de l'objet contact
+      const contact = {
+        firstName: inputFirstName.value,
+        lastName: inputName.value,
+        address: inputAddress.value,
+        city: inputCity.value,
+        email: inputEmail.value,
+      };
+
+      const order = { contact, products };
+
+      // Envoi de la commande uniquement si les champs correctement remplis
+      if (
+        validateFirstName() &&
+        validateName() &&
+        validateAddress() &&
+        validateCity() &&
+        validateeMail()
+      ) {
+        const result = await fetch('http://localhost:3000/api/products/order', {
+          method: 'POST',
+          body: JSON.stringify(order),
+          headers: {
+            'Content-type': 'application/json',
+            Accept: 'application/json',
+          },
+        });
+        // récupération de la réponse du back-end contenant l'orderId
+        const data = await result.json();
+        // redirection vers l'url de la page de confirmation en fonction de l'orderId
+        window.location.href = `confirmation.html?orderId=${data.orderId}`;
+      } else {
+        alert(
+          'Merci de renseigner correctement tous les champs pour envoyer votre commande'
+        );
+      }
+    }
+  });
 
   /**************************************************   DEFINITION DES ARTICLES DU PANIER  *******************************************************/
   
