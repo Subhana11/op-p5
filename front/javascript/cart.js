@@ -157,14 +157,11 @@ function addItemQuantity(index) {
 // initialisation panier
 function getBasket() {
     let basket = localStorage.getItem('basket');
-  
     if (basket !== null) {
       return JSON.parse(basket);
       
     }
-  
     return [];
-    
   }
   // Affichage quantité totale : filtrage avec map(), addition par paire de chaque quantité avec reduce()
 function updateTextQuantity() {
@@ -245,12 +242,19 @@ function saveToBasket(basket) {
         addedProduct.quantity = updateQuantity;
   
         // Plafonnement de la quantité à 100
-        if (addedProduct.quantity > 100) {
+        if (addedProduct.quantity > 100 ) { 
           addedProduct.quantity = 100;
           alert(
             'Vous avez atteint la limite de quantité à 100 par commande pour ce produit'
           );
         }
+        if (addedProduct.quantity < 0 ) {
+          addedProduct.quantity = 0;
+          alert(
+            'choisisez une quantité valide'
+          );
+        } 
+        
   
         saveToBasket(basket);
         updateTextQuantity();
@@ -274,7 +278,8 @@ function validateFirstName() {
   let validationTxt = document.getElementById('firstNameErrorMsg');
 
   if (inputFirstName.value.match(RegExpName)) {
-  
+    validationTxt.textContent = 'Prénom valide';
+    
     return true;
   } else {
     validationTxt.textContent = 'Prénom non valide';
@@ -293,6 +298,7 @@ function validateName() {
   let validationTxt = document.getElementById('lastNameErrorMsg');
 
   if (inputName.value.match(RegExpName)) {
+    validationTxt.textContent = 'Nom valide';
     return true;
 
   } else {
@@ -313,6 +319,7 @@ function validateCity() {
   const regExpCity = new RegExp(/^[A-Za-z\à\é\è\ê\ñ\ë\Ë\Ê\-]{1,45}$/);
 
   if (inputCity.value.match(regExpCity)) {
+    validationTxt.textContent = 'Ville valide';
   
     return true;
   } else {
@@ -334,6 +341,7 @@ function validateAddress() {
   const regExpAdress = new RegExp(/^[a-zA-Z0-9\à\é\è\ê\ñ\ë\Ë\Ê\s,'-]{5,}$/);
 
   if (inputAddress.value.match(regExpAdress)) {
+    validationTxt.textContent = 'Adresse valide';
    
     return true;
   } else {
@@ -355,8 +363,9 @@ function validateeMail() {
     /^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$/,
     'g'
   );
-  
+
   if (inputEmail.value.match(regExpMail)) {
+    validationTxt.textContent = 'E-mail valide';
     
     return true;
   } else {
@@ -370,7 +379,7 @@ function validateeMail() {
 
 // Récupération des Ids des produits seulement si le panier est existant
 function getAllProductId() {
-  if (getBasket() != null) {
+  if (getBasket() != null ) {
     return getBasket().map((p) => p.id);
   }
   return [];
@@ -384,13 +393,15 @@ document
   .getElementById('order')
   .addEventListener('click', async function ordering(e) {
     e.preventDefault();
-
+   
     // Empêcher l'envoi de la commande si le panier est vide ou inexistant (dans le localStorage)
-    if (getBasket() == false || getBasket() == null) {
+    if (getBasket () == false || getBasket() == null ) {
       alert(
         `Vous devez constituer un panier d'achat avant d'envoyer votre commande`
-      );
-    } else {
+      ); 
+        return;       
+    }
+    else {
       // Construction de l'objet contact
       const contact = {
         firstName: inputFirstName.value,
@@ -408,8 +419,9 @@ document
         validateName() &&
         validateAddress() &&
         validateCity() &&
-        validateeMail()
-      ) {
+        validateeMail() 
+      )
+       {
         const result = await fetch('http://localhost:3000/api/products/order', {
           method: 'POST',
           body: JSON.stringify(order),
