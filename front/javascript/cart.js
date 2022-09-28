@@ -127,6 +127,8 @@ function addItemQuantity(index) {
     input.setAttribute('min', '1');
     input.setAttribute('max', '100');
     input.setAttribute('value', `${basket[index].quantity}`);
+    input.setAttribute('onkeypress', 'return event.charCode>=48 && event.charCode<=57')
+    
     document
       .getElementsByClassName('set__quantity-' + index)[0]
       .appendChild(input);
@@ -209,7 +211,7 @@ function saveToBasket(basket) {
         const itemsToKeep = basket.filter(
           (p) => p.id !== currentItem.id || p.color !== currentItem.color
         );
-  
+          
         let section = document.getElementById('cart__items');
         let article = document.getElementsByClassName('cart__item-' + j)[0];
         section.removeChild(article);
@@ -217,6 +219,7 @@ function saveToBasket(basket) {
         saveToBasket(itemsToKeep);
         updateTextQuantity();
         updateTotalPrice();
+
       });
     }
   }
@@ -248,12 +251,13 @@ function saveToBasket(basket) {
             'Vous avez atteint la limite de quantité à 100 par commande pour ce produit'
           );
         }
-        if (addedProduct.quantity < 0 ) {
+        if (addedProduct.quantity < 0 ) { 
           addedProduct.quantity = 0;
           alert(
-            'choisisez une quantité valide'
+            'Vous avez atteint la limite de quantité à 100 par commande pour ce produit'
           );
-        } 
+        }
+         
         
   
         saveToBasket(basket);
@@ -401,6 +405,7 @@ document
       ); 
         return;       
     }
+    
     else {
       // Construction de l'objet contact
       const contact = {
